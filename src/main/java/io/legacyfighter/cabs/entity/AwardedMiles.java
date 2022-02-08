@@ -1,8 +1,6 @@
-package io.legacyfighter.cabs.entity.miles;
+package io.legacyfighter.cabs.entity;
 
 import io.legacyfighter.cabs.common.BaseEntity;
-import io.legacyfighter.cabs.entity.Client;
-import io.legacyfighter.cabs.entity.Transit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +14,14 @@ public class AwardedMiles extends BaseEntity {
     private Client client;
 
     @Column(nullable = false)
+    private Integer miles;
+
+    @Column(nullable = false)
     private Instant date = Instant.now();
 
-    private String milesJson;
+    private Instant expirationDate;
+
+    private Boolean isSpecial;
 
     @ManyToOne
     private Transit transit;
@@ -34,16 +37,12 @@ public class AwardedMiles extends BaseEntity {
         this.client = client;
     }
 
-    public Miles getMiles() {
-        return MilesJsonMapper.deserialize(milesJson);
+    public Integer getMiles() {
+        return miles;
     }
 
-    public Integer getMilesAmount(Instant when) {
-        return getMiles().getAmountFor(when);
-    }
-
-    public void setMiles(Miles miles) {
-        milesJson = MilesJsonMapper.serialize(miles);
+    public void setMiles(Integer miles) {
+        this.miles = miles;
     }
 
     public Instant getDate() {
@@ -55,11 +54,19 @@ public class AwardedMiles extends BaseEntity {
     }
 
     public Instant getExpirationDate() {
-        return getMiles().expiresAt();
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Instant expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public Boolean cantExpire() {
-        return getExpirationDate().equals(Instant.MAX);
+        return isSpecial;
+    }
+
+    public void setSpecial(Boolean special) {
+        isSpecial = special;
     }
 
     public void setTransit(Transit transit) {
@@ -77,13 +84,5 @@ public class AwardedMiles extends BaseEntity {
 
         return this.getId() != null &&
                 this.getId().equals(other.getId());
-    }
-
-    public void removeAll(Instant forWhen) {
-        setMiles(this.getMiles().subtract(this.getMilesAmount(forWhen), forWhen));
-    }
-
-    public void subtract(Integer miles, Instant forWhen) {
-        this.setMiles(this.getMiles().subtract(miles, forWhen));
     }
 }

@@ -1,6 +1,6 @@
 package io.legacyfighter.cabs.dto;
 
-import io.legacyfighter.cabs.entity.miles.AwardsAccount;
+import io.legacyfighter.cabs.entity.AwardsAccount;
 
 import java.time.Instant;
 
