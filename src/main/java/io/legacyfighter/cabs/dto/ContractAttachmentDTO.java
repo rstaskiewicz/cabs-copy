@@ -1,7 +1,6 @@
 package io.legacyfighter.cabs.dto;
 
 import io.legacyfighter.cabs.entity.ContractAttachment;
-import io.legacyfighter.cabs.entity.ContractAttachmentData;
 
 import java.time.Instant;
 
@@ -27,17 +26,16 @@ public class ContractAttachmentDTO {
     private ContractAttachment.Status status;
 
 
-    public ContractAttachmentDTO(ContractAttachment attachment , ContractAttachmentData data) {
+    public ContractAttachmentDTO(ContractAttachment attachment) {
         this.id = attachment.getId();
-        this.data = data.getData();
+        this.data = attachment.getData();
         this.contractId = attachment.getContract().getId();
-        this.creationDate = data.getCreationDate();
+        this.creationDate = attachment.getCreationDate();
         this.rejectedAt = attachment.getRejectedAt();
         this.acceptedAt = attachment.getAcceptedAt();
         this.changeDate = attachment.getChangeDate();
         this.status = attachment.getStatus();
     }
-
 
     public Long getId() {
         return id;

@@ -4,7 +4,6 @@ import io.legacyfighter.cabs.common.BaseEntity;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 public class ContractAttachment extends BaseEntity {
@@ -13,8 +12,15 @@ public class ContractAttachment extends BaseEntity {
         PROPOSED, ACCEPTED_BY_ONE_SIDE, ACCEPTED_BY_BOTH_SIDES, REJECTED
     }
 
+    public ContractAttachment() {
+    }
+
+    @Lob
+    @Column(name = "data", columnDefinition="BLOB")
+    private byte[] data;
+
     @Column(nullable = false)
-    private UUID contractAttachmentNo = UUID.randomUUID();
+    private Instant creationDate = Instant.now();
 
     private Instant acceptedAt;
 
@@ -27,6 +33,23 @@ public class ContractAttachment extends BaseEntity {
 
     @ManyToOne
     private Contract contract;
+
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
 
     public Instant getAcceptedAt() {
         return acceptedAt;
@@ -66,10 +89,6 @@ public class ContractAttachment extends BaseEntity {
 
     public void setContract(Contract contract) {
         this.contract = contract;
-    }
-
-    public UUID getContractAttachmentNo() {
-        return contractAttachmentNo;
     }
 
     @Override

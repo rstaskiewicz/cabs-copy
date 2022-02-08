@@ -1,16 +1,12 @@
 package io.legacyfighter.cabs.entity;
 
 import io.legacyfighter.cabs.common.BaseEntity;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 public class Contract extends BaseEntity {
@@ -29,7 +25,6 @@ public class Contract extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.JOIN)
     private Set<ContractAttachment> attachments = new HashSet<>();
 
     private String partnerName;
@@ -85,15 +80,9 @@ public class Contract extends BaseEntity {
         return subject;
     }
 
-    public List<UUID> getAttachmentIds() {
-        return attachments
-                .stream()
-                .map(ContractAttachment::getContractAttachmentNo)
-                .collect(Collectors.toList());
-    }
-
-    public ContractAttachment proposeAttachment() {
+    public ContractAttachment proposeAttachment(byte[] data) {
         ContractAttachment contractAttachment = new ContractAttachment();
+        contractAttachment.setData(data);
         contractAttachment.setContract(this);
         attachments.add(contractAttachment);
         return contractAttachment;
@@ -111,8 +100,8 @@ public class Contract extends BaseEntity {
         this.status = Status.REJECTED;
     }
 
-    public void acceptAttachment(UUID contractAttachmentNo) {
-        ContractAttachment contractAttachment = findAttachment(contractAttachmentNo);
+    public void acceptAttachment(Long attachmentId) {
+        ContractAttachment contractAttachment = findAttachment(attachmentId);
         if (contractAttachment.getStatus().equals(ContractAttachment.Status.ACCEPTED_BY_ONE_SIDE) || contractAttachment.getStatus().equals(ContractAttachment.Status.ACCEPTED_BY_BOTH_SIDES)) {
             contractAttachment.setStatus(ContractAttachment.Status.ACCEPTED_BY_BOTH_SIDES);
         } else {
@@ -120,19 +109,15 @@ public class Contract extends BaseEntity {
         }
     }
 
-    public void rejectAttachment(UUID contractAttachmentNo) {
-        ContractAttachment contractAttachment = findAttachment(contractAttachmentNo);
+    public void rejectAttachment(Long attachmentId) {
+        ContractAttachment contractAttachment = findAttachment(attachmentId);
         contractAttachment.setStatus(ContractAttachment.Status.REJECTED);
     }
 
-    public void remove(UUID contractAttachmentNo) {
-        attachments.removeIf(attachment -> attachment.getContractAttachmentNo().equals(contractAttachmentNo));
-    }
-
-    public ContractAttachment findAttachment(UUID attachmentNo) {
+    private ContractAttachment findAttachment(Long attachmentId) {
         return attachments
                 .stream()
-                .filter(a -> a.getContractAttachmentNo().equals(attachmentNo))
+                .filter(a -> a.getId().equals(attachmentId))
                 .findFirst()
                 .orElse(null);
     }

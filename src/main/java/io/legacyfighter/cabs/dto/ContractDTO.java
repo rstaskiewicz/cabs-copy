@@ -3,13 +3,11 @@ package io.legacyfighter.cabs.dto;
 import io.legacyfighter.cabs.entity.Contract;
 import io.legacyfighter.cabs.entity.Contract.Status;
 import io.legacyfighter.cabs.entity.ContractAttachment;
-import io.legacyfighter.cabs.entity.ContractAttachmentData;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 public class ContractDTO {
 
@@ -36,7 +34,7 @@ public class ContractDTO {
 
     private List<ContractAttachmentDTO> attachments = new ArrayList<>();
 
-    public ContractDTO(Contract contract, Set<ContractAttachmentData> attachments) {
+    public ContractDTO(Contract contract, Set<ContractAttachment> attachments) {
         this.setContractNo(contract.getContractNo());
         this.setAcceptedAt(contract.getAcceptedAt());
         this.setRejectedAt(contract.getRejectedAt());
@@ -45,10 +43,8 @@ public class ContractDTO {
         this.setStatus(contract.getStatus());
         this.setPartnerName(contract.getPartnerName());
         this.setSubject(contract.getSubject());
-        for (ContractAttachmentData attachmentData : attachments) {
-            UUID contractAttachmentNo = attachmentData.getContractAttachmentNo();
-            ContractAttachment attachment = contract.findAttachment(contractAttachmentNo);
-            this.attachments.add(new ContractAttachmentDTO(attachment, attachmentData));
+        for (ContractAttachment attachment : attachments) {
+            this.attachments.add(new ContractAttachmentDTO(attachment));
         }
         this.setId(contract.getId());
     }
