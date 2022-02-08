@@ -15,7 +15,7 @@ public interface AwardsService {
 
     AwardedMiles registerMiles(Long clientId, Long transitId);
 
-    AwardedMiles registerNonExpiringMiles(Long clientId, Integer miles);
+    AwardedMiles registerSpecialMiles(Long clientId, Integer miles);
 
     void removeMiles(Long clientId, Integer miles);
 

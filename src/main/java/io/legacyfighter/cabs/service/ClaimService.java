@@ -106,7 +106,7 @@ public class ClaimService {
             claim.refund();
             clientNotificationService.notifyClientAboutRefund(claim.getClaimNo(), claim.getOwner().getId());
             if (claim.getOwner().getType().equals(Client.Type.VIP)) {
-                awardsService.registerNonExpiringMiles(claim.getOwner().getId(), 10);
+                awardsService.registerSpecialMiles(claim.getOwner().getId(), 10);
             }
         }
         if (result.decision == ESCALATED) {

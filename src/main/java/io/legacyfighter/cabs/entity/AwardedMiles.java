@@ -61,7 +61,7 @@ public class AwardedMiles extends BaseEntity {
         this.expirationDate = expirationDate;
     }
 
-    public Boolean cantExpire() {
+    public Boolean isSpecial() {
         return isSpecial;
     }
 
