@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DriverReportController {
 
-    private final SqlBasedDriverReportCreator driverReportCreator;
+    private final DriverReportCreator driverReportCreator;
 
-    DriverReportController(SqlBasedDriverReportCreator driverReportCreator) {
+    DriverReportController(DriverReportCreator driverReportCreator) {
         this.driverReportCreator = driverReportCreator;
     }
 
     @GetMapping("/driverreport/{driverId}")
     @Transactional
     public DriverReport loadReportForDriver(@PathVariable Long driverId, @RequestParam int lastDays) {
-        return driverReportCreator.createReport(driverId, lastDays);
+        return driverReportCreator.create(driverId, lastDays);
     }
 }
