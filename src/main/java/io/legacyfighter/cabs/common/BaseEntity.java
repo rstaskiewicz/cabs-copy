@@ -10,7 +10,7 @@ public class BaseEntity {
 
     @GeneratedValue
     @Id
-    protected Long id;
+    private Long id;
  
     @Version
     private Integer version;

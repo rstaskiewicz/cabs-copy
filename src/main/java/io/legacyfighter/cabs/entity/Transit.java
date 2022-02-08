@@ -109,10 +109,6 @@ public class Transit extends BaseEntity {
     public Transit() {
     }
 
-    public Transit(Long id) {
-        this.id = id;
-    }
-
     public Transit(Address from, Address to, Client client, CarType.CarClass carClass, Instant when, Distance distance) {
         this(Status.DRAFT, from, to, client, carClass, when, distance);
     }
