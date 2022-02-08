@@ -1,7 +1,6 @@
 package io.legacyfighter.cabs.integration;
 
 import io.legacyfighter.cabs.entity.*;
-import io.legacyfighter.cabs.money.Money;
 import io.legacyfighter.cabs.repository.AddressRepository;
 import io.legacyfighter.cabs.repository.ClientRepository;
 import io.legacyfighter.cabs.repository.DriverFeeRepository;
@@ -52,19 +51,19 @@ class CalculateDriverPeriodicPaymentsIntegrationTest {
         driverHasFee(driver, DriverFee.FeeType.FLAT, 10);
 
         //when
-        Money feeOctober = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 10);
+        Integer feeOctober = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 10);
         //then
-        assertEquals(new Money(180), feeOctober);
+        assertEquals(180, feeOctober);
 
         //when
-        Money feeNovember = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 11);
+        Integer feeNovember = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 11);
         //then
-        assertEquals(new Money(70), feeNovember);
+        assertEquals(70, feeNovember);
 
         //when
-        Money feeDecember = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 12);
+        Integer feeDecember = driverService.calculateDriverMonthlyPayment(driver.getId(), 2000, 12);
         //then
-        assertEquals(new Money(5), feeDecember);
+        assertEquals(5, feeDecember);
     }
 
     @Test
@@ -82,26 +81,26 @@ class CalculateDriverPeriodicPaymentsIntegrationTest {
         driverHasFee(driver, DriverFee.FeeType.FLAT, 10);
 
         //when
-        Map<Month, Money> payments = driverService.calculateDriverYearlyPayment(driver.getId(), 2000);
+        Map<Month, Integer> payments = driverService.calculateDriverYearlyPayment(driver.getId(), 2000);
 
         //then
-        assertEquals(new Money(0), payments.get(Month.JANUARY));
-        assertEquals(new Money(0), payments.get(Month.FEBRUARY));
-        assertEquals(new Money(0), payments.get(Month.MARCH));
-        assertEquals(new Money(0), payments.get(Month.APRIL));
-        assertEquals(new Money(0), payments.get(Month.MAY));
-        assertEquals(new Money(0), payments.get(Month.JUNE));
-        assertEquals(new Money(0), payments.get(Month.JULY));
-        assertEquals(new Money(0), payments.get(Month.AUGUST));
-        assertEquals(new Money(0), payments.get(Month.SEPTEMBER));
-        assertEquals(new Money(180), payments.get(Month.OCTOBER));
-        assertEquals(new Money(70), payments.get(Month.NOVEMBER));
-        assertEquals(new Money(5), payments.get(Month.DECEMBER));
+        assertEquals(0, payments.get(Month.JANUARY));
+        assertEquals(0, payments.get(Month.FEBRUARY));
+        assertEquals(0, payments.get(Month.MARCH));
+        assertEquals(0, payments.get(Month.APRIL));
+        assertEquals(0, payments.get(Month.MAY));
+        assertEquals(0, payments.get(Month.JUNE));
+        assertEquals(0, payments.get(Month.JULY));
+        assertEquals(0, payments.get(Month.AUGUST));
+        assertEquals(0, payments.get(Month.SEPTEMBER));
+        assertEquals(180, payments.get(Month.OCTOBER));
+        assertEquals(70, payments.get(Month.NOVEMBER));
+        assertEquals(5, payments.get(Month.DECEMBER));
     }
 
     public Transit aTransit(Driver driver, Integer price, LocalDateTime when) {
         Transit transit = new Transit();
-        transit.setPrice(new Money(price));
+        transit.setPrice(price);
         transit.setDriver(driver);
         transit.setDateTime(when.toInstant(ZoneOffset.UTC));
         return transitRepository.save(transit);
@@ -112,7 +111,7 @@ class CalculateDriverPeriodicPaymentsIntegrationTest {
         driverFee.setDriver(driver);
         driverFee.setAmount(amount);
         driverFee.setFeeType(feeType);
-        driverFee.setMin(new Money(min));
+        driverFee.setMin(min);
         return feeRepository.save(driverFee);
     }
 

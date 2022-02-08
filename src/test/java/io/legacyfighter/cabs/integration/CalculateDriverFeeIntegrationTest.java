@@ -4,7 +4,6 @@ import io.legacyfighter.cabs.entity.Driver;
 import io.legacyfighter.cabs.entity.DriverFee;
 import io.legacyfighter.cabs.entity.Transit;
 
-import io.legacyfighter.cabs.money.Money;
 import io.legacyfighter.cabs.repository.DriverFeeRepository;
 import io.legacyfighter.cabs.repository.TransitRepository;
 import io.legacyfighter.cabs.service.DriverFeeService;
@@ -43,10 +42,10 @@ class CalculateDriverFeeIntegrationTest {
         driverHasFee(driver, DriverFee.FeeType.FLAT, 10);
 
         //when
-        Money fee = driverFeeService.calculateDriverFee(transit.getId());
+        Integer fee = driverFeeService.calculateDriverFee(transit.getId());
 
         //then
-        assertEquals(new Money(50), fee);
+        assertEquals(50, fee);
     }
 
     @Test
@@ -59,10 +58,10 @@ class CalculateDriverFeeIntegrationTest {
         driverHasFee(driver, DriverFee.FeeType.PERCENTAGE, 50);
 
         //when
-        Money fee = driverFeeService.calculateDriverFee(transit.getId());
+        Integer fee = driverFeeService.calculateDriverFee(transit.getId());
 
         //then
-        assertEquals(new Money(40), fee);
+        assertEquals(40, fee);
     }
 
     @Test
@@ -75,10 +74,10 @@ class CalculateDriverFeeIntegrationTest {
         driverHasFee(driver, DriverFee.FeeType.PERCENTAGE, 7, 5);
 
         //when
-        Money fee = driverFeeService.calculateDriverFee(transit.getId());
+        Integer fee = driverFeeService.calculateDriverFee(transit.getId());
 
         //then
-        assertEquals(new Money(5), fee);
+        assertEquals(5, fee);
     }
 
     DriverFee driverHasFee(Driver driver, DriverFee.FeeType feeType, int amount, Integer min) {
@@ -86,7 +85,7 @@ class CalculateDriverFeeIntegrationTest {
         driverFee.setDriver(driver);
         driverFee.setAmount(amount);
         driverFee.setFeeType(feeType);
-        driverFee.setMin(new Money(min));
+        driverFee.setMin(min);
         return feeRepository.save(driverFee);
     }
 
@@ -100,7 +99,7 @@ class CalculateDriverFeeIntegrationTest {
 
     Transit aTransit(Driver driver, Integer price) {
         Transit transit = new Transit();
-        transit.setPrice(new Money(price));
+        transit.setPrice(price);
         transit.setDriver(driver);
         transit.setDateTime(LocalDate.of(2020,10,20).atStartOfDay().toInstant(ZoneOffset.UTC));
         return transitRepository.save(transit);
