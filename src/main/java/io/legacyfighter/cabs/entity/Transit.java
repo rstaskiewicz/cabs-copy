@@ -1,7 +1,6 @@
 package io.legacyfighter.cabs.entity;
 
 import io.legacyfighter.cabs.common.BaseEntity;
-import io.legacyfighter.cabs.distance.Distance;
 import io.legacyfighter.cabs.money.Money;
 
 import javax.persistence.*;
@@ -232,12 +231,12 @@ public class Transit extends BaseEntity {
         this.driver = driver;
     }
 
-    public Distance getKm() {
-        return Distance.ofKm(km);
+    public float getKm() {
+        return km;
     }
 
-    public void setKm(Distance km) {
-        this.km = km.toKmInFloat();
+    public void setKm(float km) {
+        this.km = km;
         estimateCost();
     }
 

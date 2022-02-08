@@ -1,6 +1,5 @@
 package io.legacyfighter.cabs.ui;
 
-import io.legacyfighter.cabs.distance.Distance;
 import io.legacyfighter.cabs.dto.TransitDTO;
 import io.legacyfighter.cabs.entity.Address;
 import io.legacyfighter.cabs.entity.Client;
@@ -52,7 +51,7 @@ public class CalculateTransitDistanceTest {
         t.setTo(new Address());
         t.setFrom(new Address());
         t.setStatus(Transit.Status.DRAFT);
-        t.setKm(Distance.ofKm(km));
+        t.setKm(km);
         t.setClient(new Client());
         return new TransitDTO(t);
     }

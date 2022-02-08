@@ -1,6 +1,5 @@
 package io.legacyfighter.cabs.dto;
 
-import io.legacyfighter.cabs.distance.Distance;
 import io.legacyfighter.cabs.entity.CarType;
 import io.legacyfighter.cabs.entity.Driver;
 import io.legacyfighter.cabs.entity.Transit;
@@ -11,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TransitDTO {
 
@@ -24,7 +24,7 @@ public class TransitDTO {
 
     public Integer factor;
 
-    private Distance distance;
+    private Float distance;
 
     private String distanceUnit;
 
@@ -164,7 +164,25 @@ public class TransitDTO {
 
     public String getDistance(String unit) {
         this.distanceUnit = unit;
-        return distance.printIn(unit);
+        if (unit.equals("km")) {
+            if (distance == Math.ceil(distance)) {
+                return String.format(Locale.US, "%d", Math.round(distance)) + "km";
+
+            }
+            return String.format(Locale.US, "%.3f", distance) + "km";
+        }
+        if (unit.equals("miles")) {
+            float distance = this.distance / 1.609344f;
+            if (distance == Math.ceil(distance)) {
+                return String.format(Locale.US, "%d", Math.round(distance)) + "miles";
+            }
+            return String.format(Locale.US, "%.3f", distance) + "miles";
+
+        }
+        if (unit.equals("m")) {
+            return String.format(Locale.US, "%d", Math.round(distance * 1000)) + "m";
+        }
+        throw new IllegalArgumentException("Invalid unit " + unit);
     }
 
     public List<DriverDTO> getProposedDrivers() {
