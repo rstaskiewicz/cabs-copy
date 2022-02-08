@@ -50,9 +50,6 @@ public class Fixtures {
     @Autowired
     AwardsService awardsService;
 
-    @Autowired
-    DriverAttributeRepository driverAttributeRepository;
-
     public Client aClient() {
         return clientRepository.save(new Client());
     }
@@ -97,11 +94,7 @@ public class Fixtures {
     }
 
     public Driver aDriver() {
-        return aDriver(Status.ACTIVE, "Janusz", "Kowalsi", "FARME100165AB5EW");
-    }
-
-    public Driver aDriver(Status status, String name, String lastName, String driverLicense) {
-        return driverService.createDriver(driverLicense, lastName, name, Driver.Type.REGULAR, status, "");
+        return driverService.createDriver("FARME100165AB5EW", "Kowalsi", "Janusz", Driver.Type.REGULAR, Status.ACTIVE, "");
     }
 
     public Transit aCompletedTransitAt(int price, Instant when) {
@@ -161,12 +154,6 @@ public class Fixtures {
         return claim;
     }
 
-    public Claim createClaim(Client client, Transit transit, String reason) {
-        ClaimDTO claimDTO = claimDto("Okradli mnie na hajs", reason, client.getId(), transit.getId());
-        claimDTO.setDraft(false);
-        return claimService.create(claimDTO);
-    }
-
     public Claim createAndResolveClaim(Client client, Transit transit) {
         Claim claim = createClaim(client, transit);
         claim = claimService.tryToResolveAutomatically(claim.getId());
@@ -200,8 +187,5 @@ public class Fixtures {
     public void activeAwardsAccount(Client client) {
         awardsAccount(client);
         awardsService.activateAccount(client.getId());
-    }
-    public void driverHasAttribute(Driver driver, DriverAttribute.DriverAttributeName name, String value) {
-        driverAttributeRepository.save(new DriverAttribute(driver, name, value));
     }
 }
