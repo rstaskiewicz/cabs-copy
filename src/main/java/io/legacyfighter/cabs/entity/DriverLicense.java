@@ -1,16 +1,11 @@
 package io.legacyfighter.cabs.entity;
 
-import javax.persistence.Embeddable;
 
-@Embeddable
 public class DriverLicense {
 
     public static final String DRIVER_LICENSE_REGEX = "^[A-Z9]{5}\\d{6}[A-Z9]{2}\\d[A-Z]{2}$";
 
-    private String driverLicense;
-
-    public DriverLicense() {
-    }
+    private final String driverLicense;
 
     private DriverLicense(String driverLicense) {
         this.driverLicense = driverLicense;
