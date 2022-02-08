@@ -23,34 +23,46 @@ public class ContractService {
 
     @Transactional
     public Contract createContract(ContractDTO contractDTO) {
+        Contract contract = new Contract();
+        contract.setPartnerName(contractDTO.getPartnerName());
         int partnerContractsCount = contractRepository.findByPartnerName(contractDTO.getPartnerName()).size() + 1;
-        Contract contract = new Contract(contractDTO.getPartnerName(), contractDTO.getSubject(), "C/" + partnerContractsCount + "/" + contractDTO.getPartnerName());
+        contract.setSubject(contractDTO.getSubject());
+        contract.setContractNo("C/" + partnerContractsCount + "/" + contractDTO.getPartnerName());
         return contractRepository.save(contract);
     }
 
     @Transactional
     public void acceptContract(Long id) {
         Contract contract = find(id);
-        contract.accept();
+        List<ContractAttachment> attachments = contractAttachmentRepository.findByContract(contract);
+        if(attachments.stream().allMatch(a -> a.getStatus().equals(ContractAttachment.Status.ACCEPTED_BY_BOTH_SIDES))) {
+            contract.setStatus(Contract.Status.ACCEPTED);
+        } else {
+            throw new IllegalStateException("Not all attachments accepted by both sides");
+        }
     }
 
     @Transactional
     public void rejectContract(Long id) {
         Contract contract = find(id);
-        contract.reject();
+        contract.setStatus(Contract.Status.REJECTED);
     }
 
 
     @Transactional
     public void rejectAttachment(Long attachmentId) {
-        Contract contract = contractRepository.findByAttachmentId(attachmentId);
-        contract.rejectAttachment(attachmentId);
+        ContractAttachment contractAttachment = contractAttachmentRepository.getOne(attachmentId);
+        contractAttachment.setStatus(ContractAttachment.Status.REJECTED);
     }
 
     @Transactional
     public void acceptAttachment(Long attachmentId) {
-        Contract contract = contractRepository.findByAttachmentId(attachmentId);
-        contract.acceptAttachment(attachmentId);
+        ContractAttachment contractAttachment = contractAttachmentRepository.getOne(attachmentId);
+        if (contractAttachment.getStatus().equals(ContractAttachment.Status.ACCEPTED_BY_ONE_SIDE) || contractAttachment.getStatus().equals(ContractAttachment.Status.ACCEPTED_BY_BOTH_SIDES)) {
+            contractAttachment.setStatus(ContractAttachment.Status.ACCEPTED_BY_BOTH_SIDES);
+        } else {
+            contractAttachment.setStatus(ContractAttachment.Status.ACCEPTED_BY_ONE_SIDE);
+        }
     }
 
     @Transactional
@@ -64,14 +76,18 @@ public class ContractService {
 
     @Transactional
     public ContractDTO findDto(Long id) {
-        return new ContractDTO(find(id), contractAttachmentRepository.findByContractId(id));
+        return new ContractDTO(find(id));
     }
 
     @Transactional
     public ContractAttachmentDTO proposeAttachment(Long contractId, ContractAttachmentDTO contractAttachmentDTO) {
         Contract contract = find(contractId);
-        ContractAttachment contractAttachment = contract.proposeAttachment(contractAttachmentDTO.getData());
-        return new ContractAttachmentDTO(contractAttachmentRepository.save(contractAttachment));
+        ContractAttachment contractAttachment = new ContractAttachment();
+        contractAttachment.setContract(contract);
+        contractAttachment.setData(contractAttachmentDTO.getData());
+        contractAttachmentRepository.save(contractAttachment);
+        contract.getAttachments().add(contractAttachment);
+        return new ContractAttachmentDTO(contractAttachment);
     }
 
     @Transactional

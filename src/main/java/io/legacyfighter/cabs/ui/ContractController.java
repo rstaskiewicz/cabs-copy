@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
 @RestController
 public class ContractController {
 
@@ -19,7 +17,7 @@ public class ContractController {
     @PostMapping("/contracts/")
     ResponseEntity<ContractDTO> create(@RequestBody ContractDTO contractDTO) {
         Contract created = contractService.createContract(contractDTO);
-        return ResponseEntity.ok(new ContractDTO(created, Set.of()));
+        return ResponseEntity.ok(new ContractDTO(created));
     }
 
 
