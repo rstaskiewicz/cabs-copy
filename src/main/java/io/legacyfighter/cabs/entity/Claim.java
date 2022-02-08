@@ -5,11 +5,6 @@ import io.legacyfighter.cabs.common.BaseEntity;
 import javax.persistence.*;
 import java.time.Instant;
 
-import static io.legacyfighter.cabs.entity.Claim.CompletionMode.AUTOMATIC;
-import static io.legacyfighter.cabs.entity.Claim.CompletionMode.MANUAL;
-import static io.legacyfighter.cabs.entity.Claim.Status.ESCALATED;
-import static io.legacyfighter.cabs.entity.Claim.Status.REFUNDED;
-
 @Entity
 public class Claim extends BaseEntity {
 
@@ -52,20 +47,6 @@ public class Claim extends BaseEntity {
 
     @Column(nullable = false)
     private String claimNo;
-
-    public void escalate() {
-        setStatus(ESCALATED);
-        setCompletionDate(Instant.now());
-        setChangeDate(Instant.now());
-        setCompletionMode(MANUAL);
-    }
-
-    public void refund() {
-        setStatus(REFUNDED);
-        setCompletionDate(Instant.now());
-        setChangeDate(Instant.now());
-        setCompletionMode(AUTOMATIC);
-    }
 
     public String getClaimNo() {
         return claimNo;
