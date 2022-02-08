@@ -21,7 +21,6 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static io.legacyfighter.cabs.entity.Client.Type.NORMAL;
-import static io.legacyfighter.cabs.entity.Client.Type.VIP;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -258,7 +257,7 @@ class AwardMilesManagementIntegrationTest {
     @Test
     void cannotRemoveMoreThanClientHasMiles() {
         //given
-        Client client = fixtures.aClient(NORMAL);
+        Client client = fixtures.aClient();
         //and
         fixtures.activeAwardsAccount(client);
         //and
