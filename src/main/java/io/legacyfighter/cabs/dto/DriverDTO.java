@@ -17,16 +17,6 @@ public class DriverDTO {
 
     private Driver.Type type;
 
-    public DriverDTO(Long id, String firstName, String lastName, String driverLicense, String photo, Driver.Status status, Driver.Type type) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.driverLicense = driverLicense;
-        this.photo = photo;
-        this.status = status;
-        this.type = type;
-    }
-
     public DriverDTO(Driver driver) {
         this.id = driver.getId();
         firstName = driver.getFirstName();

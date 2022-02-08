@@ -1,8 +1,6 @@
 package io.legacyfighter.cabs.dto;
 
 
-import io.legacyfighter.cabs.entity.DriverAttribute;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +38,5 @@ public class DriverReport {
         this.sessions = sessions;
     }
 
-    public void addAttr(DriverAttribute.DriverAttributeName name, String value) {
-        attributes.add(new DriverAttributeDTO(name, value));
-    }
 }
 
