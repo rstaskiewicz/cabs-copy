@@ -10,7 +10,6 @@ import io.legacyfighter.cabs.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -26,16 +25,6 @@ public class Fixtures {
 
     @Autowired
     DriverService driverService;
-
-    @Autowired
-    ClientRepository clientRepository;
-
-    @Autowired
-    AddressRepository addressRepository;
-
-    public Client aClient() {
-        return clientRepository.save(new Client());
-    }
 
     public Transit aTransit(Driver driver, Integer price, LocalDateTime when) {
         Transit transit = new Transit();
@@ -66,12 +55,4 @@ public class Fixtures {
         return driverService.createDriver("FARME100165AB5EW", "Kowalsi", "Janusz", Driver.Type.REGULAR, Status.ACTIVE, "");
     }
 
-    public Transit aCompletedTransitAt(int price, Instant when) {
-        Transit transit = aTransit(null, price);
-        transit.setDateTime(when);
-        transit.setTo(addressRepository.save(new Address("Polska", "Warszawa", "Zytnia", 20)));
-        transit.setFrom(addressRepository.save(new Address("Polska", "Warszawa", "Młynarska", 20)));
-        transit.setClient(aClient());
-        return transitRepository.save(transit);
-    }
 }
